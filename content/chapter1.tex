@@ -1,107 +1,238 @@
 % 第一章：正文内容示例
-\section{正文示例章节}
+\section{Direct Data Driven Control}
 
-这是一个简单的正文内容展示。你可以看到，普通文本使用的是默认的字号和对齐方式。你可以自由添加内容并调整格式。
+\begin{definition}{数据驱动控制}
+  控制器的设计不包含受控过程数学模型信息，仅利用受控系统的\hl{输入输出数据}以及\hl{经过数据处理而得到的知识}来设计控制器。
+\end{definition}
 
-\subsection{子章节标题}
 
-这是一个子章节的内容展示。你可以在这里添加更多详细的文本内容，或者分段介绍不同的主题。
-
-\subsection{列表示例}
-
-这里是无序列表和有序列表的示例：
-
-\paragraph{无序列表}
-\begin{itemize}
-    \item 项目 1
-    \item 项目 2
-    \item 项目 3
-\end{itemize}
-
-\paragraph{有序列表}
-\begin{enumerate}
-    \item 第一项
-    \item 第二项
-    \item 第三项
-\end{enumerate}
-
-\subsection{英文字体展示}
-
-The font I chose is Palatino, a classic serif font designed by German type designer Hermann Zapf in 1948. 
-Compared to \textit{Times New Roman}, Palatino has softer stroke contrasts and a more open character layout, making it less compact and serious, resulting in a more comfortable reading experience.
-
-\subsection{三线表示例}
-
-这是一个简单的三线表展示：
-
-\begin{table}[htbp]
-  \begin{center}
-    \caption{Notations}
-    \begin{tabular}{m{2cm} m{11.6cm}}
-      \toprule[2pt]
-      \multicolumn{1}{m{2.7cm}}{\centering Symbol}
-      & \multicolumn{1}{m{12cm}}{\centering Description} \\
-      \midrule
-      $\mathcal{S}$ & State space of the embodied agent \\
-      \vspace{2pt}
-      $\mathcal{A}$ & Discrete action space \\
-      \vspace{2pt}
-      $T(s' \mid s, a)$ & State transition function \\
-      \vspace{2pt}
-      $R(s, a)$ & Reward function (negative distance to goal) \\
-      \vspace{2pt}
-      $\gamma$ & Discount factor, $\gamma \in (0,1)$ \\
-      \vspace{2pt}
-      $V(s)$ & Value function of state $s$ \\
-      \vspace{2pt}
-      $\pi(s)$ & Policy mapping states to actions \\
-      \vspace{2pt}
-      $V^*$ & Optimal value function \\
-      \vspace{2pt}
-      $\pi^*$ & Optimal policy \\
-      \vspace{2pt}
-      $\theta$ & Convergence threshold for value iteration \\
-      \vspace{2pt}
-      $\Delta$ & Maximum change in value function during iteration \\
-      \vspace{3pt}
-      $s_{\text{goal}}$ & Target position in the environment \\
-      \vspace{3pt}
-      $s_{\text{pos}}$ & Current position of the agent \\
-      
-      \bottomrule[2pt]
-    \end{tabular}
-    \label{tab:notation}
-    
-    \begin{tablenotes}
-      \footnotesize
-      \item[*] *There are some variables that are not listed here and will be discussed in detail in each section.
-    \end{tablenotes}
-  \end{center}
+\begin{table}[!htbp]
+  \centering
+  \caption{数据驱动控制的典型类别}
+  \begin{tabular}{m{4cm} m{10cm}}
+    \toprule[2pt]
+    \multicolumn{1}{m{4cm}}{\centering 类别}
+    & \multicolumn{1}{m{10cm}}{\centering 描述} \\
+    \midrule
+    基于模型的间接数据驱动控制
+    & 通过数据辨识建立受控对象模型，然后基于所辨识的模型设计控制器。 \\
+    \vspace{5pt}
+    直接数据驱动控制
+    & 直接利用输入输出数据设计控制器，无需辨识受控对象模型。 \\
+    \vspace{5pt}
+    基于机器学习的数据驱动控制
+    & 利用机器学习方法（如强化学习、神经网络）从数据中学习控制策略。 \\
+    \bottomrule[2pt]
+  \end{tabular}
+  \label{tab:ddc_types}
 \end{table}
 
+\paragraph{主要类型分:离线-在线两类}
+\begin{table}[htbp]
+  \centering
+  \caption{数据驱动控制的典型方法示例（离线/在线）}
+  \begin{tabular}{m{4cm} m{10cm}}
+    \toprule[2pt]
+    & \multicolumn{1}{m{10cm}}{\centering 说明或示例} \\
+    \midrule
+    SPSA (同时扰动随机近似)
+    & 一种随机优化方法，可用于无模型或仅基于数据的参数调优。 \\
+    虚拟参考反馈整定 (VRFT)
+    & 直接数据驱动的控制器整定方法，通过虚拟参考实现闭环性能匹配。 \\
+    Lazy learning / 局部学习
+    & 基于局部数据集的非参数学习方法，用于在线/增量学习控制策略。 \\
+    无模型自适应控制 / PID
+    & 基于误差信号进行在线参数调整的经典方法。 \\
+    神经网络控制 / 深度强化学习
+    & 使用神经网络或强化学习从数据中直接学习控制策略，适合复杂/非线性系统。 \\
+    Koopman 方法
+    & 通过选择合适基函数将非线性系统线性化，便于利用线性工具进行控制设计。 \\
+    PINN（物理启发神经网络）
+    & 将物理守恒律或偏微分方程融入神经网络训练，提高数据效率和物理一致性。 \\
+    数据驱动的 MPC
+    & 直接利用历史数据或学习到的模型构建在线预测控制器（MPC）。 \\
+    线性模型假设辨识 + 最优控制
+    & 先通过数据辨识得到线性近似模型，再基于该模型设计最优控制器。 \\
+    \bottomrule[2pt]
+  \end{tabular}
+  \label{tab:ddc_methods}
+\end{table}
 
-\subsection{伪代码示例}
+\paragraph{三种重要类型}
+\begin{itemize}
+  \item MFAC（无模型自适应控制）
+  \item Koopman控制
+  \item 神经网络/深度强化学习控制
+\end{itemize}
 
-\begin{algorithm}[H]
-  \DontPrintSemicolon
-  \caption{Value Iteration Algorithm for Embodied Navigation}
-  \KwIn{EMDP $\langle \mathcal{S}, \mathcal{A}, T, R, \gamma \rangle$, convergence threshold $\theta$}
-  \KwOut{Optimal value function $V^*$ and policy $\pi^*$}
-  \BlankLine
-  \SetAlgoLined
-  Initialize $V(s) \gets 0$ for all $s \in \mathcal{S}$\;
-  \Repeat{$\Delta < \theta$}{
-    $\Delta \gets 0$\;
-    \For{each $s \in \mathcal{S}$}{
-      $v \gets V(s)$\;
-      $V(s) \gets \max_{a \in \mathcal{A}} \left[ R(s, a) + \gamma \sum_{s'} T(s' \mid s, a) V(s') \right]$\;
-      $\Delta \gets \max(\Delta, |v - V(s)|)$\;
-    }\tcc*[r]{end for each state}
-  }\tcc*[r]{end repeat}
-  \For{each $s \in \mathcal{S}$}{
-    $\pi^*(s) \gets \arg\max_{a \in \mathcal{A}} \left[ R(s, a) + \gamma \sum_{s'} T(s' \mid s, a) V^*(s') \right]$\;
-  }\tcc*[r]{end for policy extraction}
-  \Return{$V^*, \pi^*$}
-\end{algorithm}
 
-\newpage
+
+
+
+
+
+
+\paragraph{被控对象模型的作用}
+\begin{itemize}
+  \item 描述系统行为动态，分析系统特性（响应、超调）
+  \item 线性模型和传递函数可以用来进行求解
+  \item 通过给定输入求输出
+  \item 预测、评估和决策
+\end{itemize}
+
+\paragraph{使用模型时存在的挑战}
+\begin{itemize}
+    \item 第一性原理不准确，需要良好的数学/物理方法建模
+    \item 模型难以建立、建模不准确
+    \item 建立的模型十分复杂，难以使用，解析解难以获得，数值解也难以获得；
+    \item 系统内部和环境中的扰动影响如何考虑
+    \item 使用模型做预报：针对确定性随机系统（混沌系统）长期预报是困难的，难以直接利用其模型
+    \item 复杂系统（建模十分复杂，相互耦合效应不明确）
+\end{itemize}
+
+
+
+
+\subsection{阅读:Formulas for Data-Driven Control: Stabilization,  Optimality, and Robustness}
+Authors:Claudio De Persis and Pietro Tesi
+
+
+
+
+\subsection{阅读：Verhoek 博士论文}
+\begin{note}{Direct Data-Driven Control 的优势}{label-key}
+  \begin{itemize}[nosep]
+    \item There is no bias introduced due to incorrect model selection or unmodeled dynamics. All the behavior reflected in the data is used for control, and we only need to \hl{be robust against the noise in the data}.
+    \item The question of \hlg{finding the best model for controller design becomes redundant} in the direct approach because there is no model.
+    \item \hly{Stabilization problems for unstable systems are often easier} via the direct paradigm, while identifying unstable systems is often difficult.
+  \end{itemize}
+\end{note}
+
+
+\begin{note}{The influence of the behavior approach(Polderman and Willems 1997) for direct data-driven LTI control(Markovsky and Dorfler 2021)}
+   --> there is no unifying framework that allows for providing rigorous guarantees of both stability and performance in a direct data-driven setting.
+\end{note}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% \subsection{子章节标题}
+
+% 这是一个子章节的内容展示。你可以在这里添加更多详细的文本内容，或者分段介绍不同的主题。
+
+% \subsection{列表示例}
+
+% 这里是无序列表和有序列表的示例：
+
+% \paragraph{无序列表}
+% \begin{itemize}
+%     \item 项目 1
+%     \item 项目 2
+%     \item 项目 3
+% \end{itemize}
+
+% \paragraph{有序列表}
+% \begin{enumerate}
+%     \item 第一项
+%     \item 第二项
+%     \item 第三项
+% \end{enumerate}
+
+% \subsection{英文字体展示}
+
+% The font I chose is Palatino, a classic serif font designed by German type designer Hermann Zapf in 1948. 
+% Compared to \textit{Times New Roman}, Palatino has softer stroke contrasts and a more open character layout, making it less compact and serious, resulting in a more comfortable reading experience.
+
+% \subsection{三线表示例}
+
+% 这是一个简单的三线表展示：
+
+% \begin{table}[htbp]
+%   \begin{center}
+%     \caption{Notations}
+%     \begin{tabular}{m{2cm} m{11.6cm}}
+%       \toprule[2pt]
+%       \multicolumn{1}{m{2.7cm}}{\centering Symbol}
+%       & \multicolumn{1}{m{12cm}}{\centering Description} \\
+%       \midrule
+%       $\mathcal{S}$ & State space of the embodied agent \\
+%       \vspace{2pt}
+%       $\mathcal{A}$ & Discrete action space \\
+%       \vspace{2pt}
+%       $T(s' \mid s, a)$ & State transition function \\
+%       \vspace{2pt}
+%       $R(s, a)$ & Reward function (negative distance to goal) \\
+%       \vspace{2pt}
+%       $\gamma$ & Discount factor, $\gamma \in (0,1)$ \\
+%       \vspace{2pt}
+%       $V(s)$ & Value function of state $s$ \\
+%       \vspace{2pt}
+%       $\pi(s)$ & Policy mapping states to actions \\
+%       \vspace{2pt}
+%       $V^*$ & Optimal value function \\
+%       \vspace{2pt}
+%       $\pi^*$ & Optimal policy \\
+%       \vspace{2pt}
+%       $\theta$ & Convergence threshold for value iteration \\
+%       \vspace{2pt}
+%       $\Delta$ & Maximum change in value function during iteration \\
+%       \vspace{3pt}
+%       $s_{\text{goal}}$ & Target position in the environment \\
+%       \vspace{3pt}
+%       $s_{\text{pos}}$ & Current position of the agent \\
+      
+%       \bottomrule[2pt]
+%     \end{tabular}
+%     \label{tab:notation}
+    
+%     \begin{tablenotes}
+%       \footnotesize
+%       \item[*] *There are some variables that are not listed here and will be discussed in detail in each section.
+%     \end{tablenotes}
+%   \end{center}
+% \end{table}
+
+
+% \subsection{伪代码示例}
+
+% \begin{algorithm}[H]
+%   \DontPrintSemicolon
+%   \caption{Value Iteration Algorithm for Embodied Navigation}
+%   \KwIn{EMDP $\langle \mathcal{S}, \mathcal{A}, T, R, \gamma \rangle$, convergence threshold $\theta$}
+%   \KwOut{Optimal value function $V^*$ and policy $\pi^*$}
+%   \BlankLine
+%   \SetAlgoLined
+%   Initialize $V(s) \gets 0$ for all $s \in \mathcal{S}$\;
+%   \Repeat{$\Delta < \theta$}{
+%     $\Delta \gets 0$\;
+%     \For{each $s \in \mathcal{S}$}{
+%       $v \gets V(s)$\;
+%       $V(s) \gets \max_{a \in \mathcal{A}} \left[ R(s, a) + \gamma \sum_{s'} T(s' \mid s, a) V(s') \right]$\;
+%       $\Delta \gets \max(\Delta, |v - V(s)|)$\;
+%     }\tcc*[r]{end for each state}
+%   }\tcc*[r]{end repeat}
+%   \For{each $s \in \mathcal{S}$}{
+%     $\pi^*(s) \gets \arg\max_{a \in \mathcal{A}} \left[ R(s, a) + \gamma \sum_{s'} T(s' \mid s, a) V^*(s') \right]$\;
+%   }\tcc*[r]{end for policy extraction}
+%   \Return{$V^*, \pi^*$}
+% \end{algorithm}
+
+% \newpage
+

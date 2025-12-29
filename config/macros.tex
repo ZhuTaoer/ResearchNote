@@ -4,6 +4,28 @@
 \definecolor{TheoremColor}{RGB}{139, 0, 0}      % 定理、引理、命题，深红
 \definecolor{ExampleColor}{RGB}{255, 140, 0}    % 例子，橙色
 \definecolor{ProofColor}{RGB}{80, 80, 80}       % 证明，灰色
+\definecolor{NoteColor}{RGB}{70, 130, 180}      % 笔记，钢蓝色
+
+% ========== 高亮 ==========
+\definecolor{HighlightYellow}{RGB}{255, 255, 153}   % 浅黄色高亮
+\definecolor{HighlightGreen}{RGB}{204, 255, 204}    % 浅绿色高亮
+\definecolor{HighlightBlue}{RGB}{204, 229, 255}     % 浅蓝色高亮
+\definecolor{HighlightPink}{RGB}{255, 204, 229}     % 浅粉色高亮
+\definecolor{HighlightOrange}{RGB}{255, 229, 204}   % 浅橙色高亮
+
+% 基础高亮命令（默认黄色）
+\newcommand{\hl}[1]{\colorbox{HighlightYellow}{#1}}
+
+% 多种颜色的高亮命令
+\newcommand{\hly}[1]{\colorbox{HighlightYellow}{#1}}      % 黄色
+\newcommand{\hlg}[1]{\colorbox{HighlightGreen}{#1}}       % 绿色
+\newcommand{\hlb}[1]{\colorbox{HighlightBlue}{#1}}        % 蓝色
+\newcommand{\hlp}[1]{\colorbox{HighlightPink}{#1}}        % 粉色
+\newcommand{\hlo}[1]{\colorbox{HighlightOrange}{#1}}      % 橙色
+
+% 带文字颜色的高亮（高亮 + 文字颜色）
+\newcommand{\hlr}[1]{\colorbox{HighlightYellow}{\textcolor{red}{#1}}}  % 红字黄底
+\newcommand{\hlbf}[1]{\colorbox{HighlightYellow}{\textbf{#1}}}         % 加粗黄底
 
 % ========== 定义 ==========
 \newtcbtheorem[number within=section]{definition}{定义}{
@@ -110,3 +132,19 @@
   after skip=10pt,
   borderline west={1mm}{0pt}{ProofColor!50!white}
 }
+
+% ========== 笔记 ==========
+\newtcbtheorem[number within=section]{note}{笔记}{
+  enhanced,
+  frame empty, interior empty,
+  colframe=NoteColor!50!white,
+  coltitle=NoteColor!90!white,
+  colbacktitle=NoteColor!10!white,
+  fonttitle=\bfseries,
+  borderline={0.5mm}{0pt}{NoteColor!10!white},
+  borderline={0.5mm}{0pt}{NoteColor!50!white,dashed},
+  attach boxed title to top left={yshift=-2mm, xshift=2mm},
+  boxed title style={boxrule=0.4pt},
+  varwidth boxed title,
+  breakable
+}{note}
